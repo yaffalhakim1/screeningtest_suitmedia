@@ -60,6 +60,19 @@ class _SecondState extends State<Second> {
             ),
           ),
           Padding(
+            padding: const EdgeInsets.only(left: 20.0, top: 8),
+            child: Text(
+              widget.name,
+              style: GoogleFonts.poppins(
+                textStyle: TextStyle(
+                  color: Colors.black,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
+          Padding(
             padding: const EdgeInsets.only(left: 20),
             child: Text(
               widget.user,
