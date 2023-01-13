@@ -127,55 +127,63 @@ class _ThirdState extends State<Third> {
 
           var dataToShow = snapshot.data;
 
-          return ListView.separated(
-            separatorBuilder: (context, index) => Divider(
-              color: Color(0xffe2e3e4),
-            ),
-            controller: _controller,
-            itemCount: dataToShow == null ? 0 : dataToShow.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Second(
-                        user: '',
-                        id: snapshot.data![index].id,
-                        name: snapshot.data![index].first_name +
-                            ' ' +
-                            snapshot.data![index].last_name,
+          return RefreshIndicator(
+            onRefresh: () async {
+              setState(() {
+                _future = getData(page, per_page);
+              });
+            },
+            child: ListView.separated(
+              physics: const AlwaysScrollableScrollPhysics(),
+              separatorBuilder: (context, index) => Divider(
+                color: Color(0xffe2e3e4),
+              ),
+              controller: _controller,
+              itemCount: dataToShow == null ? 0 : dataToShow.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Second(
+                          user: '',
+                          id: snapshot.data![index].id,
+                          name: snapshot.data![index].first_name +
+                              ' ' +
+                              snapshot.data![index].last_name,
+                        ),
+                      ),
+                    );
+                  },
+                  leading: CircleAvatar(
+                    backgroundImage: NetworkImage(dataToShow![index].avatar),
+                  ),
+                  title: Text(
+                    dataToShow[index].first_name +
+                        " " +
+                        dataToShow[index].last_name,
+                    style: GoogleFonts.poppins(
+                      textStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                  );
-                },
-                leading: CircleAvatar(
-                  backgroundImage: NetworkImage(dataToShow![index].avatar),
-                ),
-                title: Text(
-                  dataToShow[index].first_name +
-                      " " +
-                      dataToShow[index].last_name,
-                  style: GoogleFonts.poppins(
-                    textStyle: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
+                  ),
+                  subtitle: Text(
+                    dataToShow[index].email,
+                    style: GoogleFonts.poppins(
+                      textStyle: TextStyle(
+                        color: Color(0xff686777),
+                        fontSize: 10,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
-                ),
-                subtitle: Text(
-                  dataToShow[index].email,
-                  style: GoogleFonts.poppins(
-                    textStyle: TextStyle(
-                      color: Color(0xff686777),
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           );
         },
       ),
